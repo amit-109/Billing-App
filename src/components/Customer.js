@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Typography, CircularProgress, Box, Alert, TextField, Button, Stack, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, IconButton, InputAdornment } from '@mui/material';
+import { Typography, CircularProgress, Box, Alert, TextField, Button, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, IconButton, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,6 +7,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import CustomerSelector from './CustomerSelector';
 import axios from 'axios';
 
 export default function Customer() {
@@ -14,12 +15,6 @@ export default function Customer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // form state
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [editOpen, setEditOpen] = useState(false);
   const [editCustomer, setEditCustomer] = useState(null);
@@ -45,22 +40,7 @@ export default function Customer() {
     return () => { mounted = false; };
   }, []);
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
-    try {
-      const payload = { name, phone, email, address };
-      const res = await axios.post('/api/customers', payload);
-      setCustomers((prev) => [res.data, ...prev]);
-      setName(''); setPhone(''); setEmail(''); setAddress('');
-      setSuccessMsg('Customer created');
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to create customer');
-    } finally {
-      setSaving(false);
-    }
-  };
+
 
   const openEdit = (c) => {
     setEditCustomer({ ...c });
@@ -111,15 +91,19 @@ export default function Customer() {
     <Box>
       <Typography variant="h5" gutterBottom>Customers</Typography>
 
-      <Box component="form" onSubmit={handleCreate} sx={{ mb: 2 }}>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-          <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} required sx={{ flex: 1, minWidth: 160 }} />
-          <TextField label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required sx={{ width: 160 }} />
-          <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ width: 220 }} />
-          <TextField label="Address" value={address} onChange={(e) => setAddress(e.target.value)} sx={{ width: 220 }} />
-          <Button type="submit" variant="contained" disabled={saving}>{saving ? 'Saving...' : 'Add'}</Button>
-        </Box>
-      </Box>
+      <Paper sx={{ p: 2, mb: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>Add New Customer</Typography>
+        <CustomerSelector 
+          customers={[]}
+          selectedCustomer={null}
+          onCustomerSelect={() => {}}
+          onCustomerAdd={(newCustomer) => {
+            setCustomers(prev => [newCustomer, ...prev]);
+            setSuccessMsg('Customer added successfully');
+          }}
+          showAddButton={true}
+        />
+      </Paper>
 
       <Paper sx={{ mb: 2 }}>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', p: 1 }}>

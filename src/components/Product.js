@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Typography, Grid, Card, CardContent, CircularProgress, Box, Alert, TextField, Button, Stack, Snackbar, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, IconButton, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Typography, CircularProgress, Box, Alert, TextField, Button, Snackbar, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, IconButton, InputAdornment, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
@@ -195,6 +195,7 @@ export default function Products() {
       </Paper>
 
       <Snackbar open={!!successMsg} autoHideDuration={3000} onClose={() => setSuccessMsg('')} message={successMsg} />
+      
       <Dialog open={editOpen} onClose={() => setEditOpen(false)} fullWidth>
         <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
@@ -213,6 +214,8 @@ export default function Products() {
           <Button onClick={handleEditSave} variant="contained">Save</Button>
         </DialogActions>
       </Dialog>
+
+
     </Box>
   );
 }

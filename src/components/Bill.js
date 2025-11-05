@@ -13,19 +13,17 @@ export default function Bills() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    let mounted = true;
     const fetchBills = async () => {
       try {
         const res = await axios.get('/api/bills');
-        if (mounted) setBills(res.data || []);
+        setBills(res.data || []);
       } catch (err) {
-        if (mounted) setError(err.response?.data?.message || err.message || 'Failed to load bills');
+        setError(err.response?.data?.message || err.message || 'Failed to load bills');
       } finally {
-        if (mounted) setLoading(false);
+        setLoading(false);
       }
     };
     fetchBills();
-    return () => { mounted = false; };
   }, []);
 
   const filtered = useMemo(() => {
@@ -76,6 +74,7 @@ export default function Bills() {
               <TableRow>
                 <TableCell>Bill Number</TableCell>
                 <TableCell>Customer</TableCell>
+                <TableCell>Contact</TableCell>
                 <TableCell>Total</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Payment</TableCell>
@@ -85,7 +84,22 @@ export default function Bills() {
               {filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((b) => (
                 <TableRow key={b._id} hover>
                   <TableCell>{b.billNumber}</TableCell>
-                  <TableCell>{b.customer?.name}</TableCell>
+                  <TableCell>
+                    <Typography>{b.customer?.name}</Typography>
+                    {b.customer?.address && (
+                      <Typography variant="caption" color="text.secondary">
+                        {b.customer.address}
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{b.customer?.phone}</Typography>
+                    {b.customer?.email && (
+                      <Typography variant="caption" color="text.secondary">
+                        {b.customer.email}
+                      </Typography>
+                    )}
+                  </TableCell>
                   <TableCell>₹{b.total}</TableCell>
                   <TableCell>{new Date(b.createdAt).toLocaleString()}</TableCell>
                   <TableCell>{b.paymentMethod}</TableCell>

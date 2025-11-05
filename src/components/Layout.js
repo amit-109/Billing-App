@@ -8,7 +8,7 @@ import { Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon } from '
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Menu as MenuIcon, Dashboard, People, Inventory,
-  Receipt, ExitToApp
+  Receipt, ExitToApp, Add
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 
@@ -25,9 +25,10 @@ const Layout = ({ children, isDark, toggleTheme }) => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard />, path: '/' },
+    { text: 'Create Bill', icon: <Add />, path: '/create-bill' },
+    { text: 'Bills', icon: <Receipt />, path: '/bills' },
     { text: 'Customers', icon: <People />, path: '/customers' },
     { text: 'Products', icon: <Inventory />, path: '/products' },
-    { text: 'Bills', icon: <Receipt />, path: '/bills' },
   ];
 
   return (

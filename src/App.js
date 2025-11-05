@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import Customers from './components/Customer';
 import Products from './components/Product';
 import Bills from './components/Bill';
+import CreateBill from './components/CreateBill';
 
 const theme = createTheme({
   palette: {
@@ -76,6 +77,13 @@ function App() {
               <ProtectedRoute>
                 <Layout isDark={mode === 'dark'} toggleTheme={toggleMode}>
                   <Bills />
+                </Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/create-bill" element={
+              <ProtectedRoute>
+                <Layout isDark={mode === 'dark'} toggleTheme={toggleMode}>
+                  <CreateBill />
                 </Layout>
               </ProtectedRoute>
             } />
