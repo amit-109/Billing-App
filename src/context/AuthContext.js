@@ -10,6 +10,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || 'null'));
 
   useEffect(() => {
+    // set axios base URL from environment (REACT_APP_API_URL) when provided
+    // In development we rely on the CRA proxy in package.json, so leave baseURL empty.
+    if (process.env.REACT_APP_API_URL) {
+      axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+    }
+
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
